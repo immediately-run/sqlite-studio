@@ -1,7 +1,7 @@
 // Thin layer over sql.js: lazy engine loading, schema introspection, query
 // execution with timing, and the read-only guard the "Ask in English" flow
 // relies on before it auto-runs model-written SQL.
-import type { Database, SqlJsStatic, SqlValue } from 'sql.js/dist/sql-asm.js';
+import type { Database, SqlJsStatic, SqlValue } from '../vendor/sql-asm.js';
 
 export type { Database, SqlValue };
 
@@ -10,7 +10,7 @@ let enginePromise: Promise<SqlJsStatic> | null = null;
 /** Load the pure-JS (asm.js) sql.js build once. No `.wasm` fetch — the sandbox
  *  CSP forbids fetching binaries from a CDN, and the asm build is self-contained. */
 export function loadEngine(): Promise<SqlJsStatic> {
-  enginePromise ??= import('sql.js/dist/sql-asm.js').then((m) => m.default());
+  enginePromise ??= import('../vendor/sql-asm.js').then((m) => m.default());
   return enginePromise;
 }
 

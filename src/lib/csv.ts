@@ -1,5 +1,5 @@
 // A small, dependency-free CSV reader plus "import as table" for sql.js.
-import type { Database } from 'sql.js/dist/sql-asm.js';
+import type { Database } from '../vendor/sql-asm.js';
 import { quoteIdent } from './sqlite';
 
 export interface ParsedCsv {

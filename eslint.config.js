@@ -10,7 +10,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 // HMR-safe inside immediately.run — keep it. Data goes in src/data/, hooks in
 // src/hooks/.
 export default defineConfig([
-  globalIgnores(['dist']),
+  globalIgnores(['dist', 'src/vendor']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

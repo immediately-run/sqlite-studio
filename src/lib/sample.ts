@@ -1,7 +1,7 @@
 // Builds the built-in sample database at runtime from src/data/sample.ts. The
 // generator is seeded so every visitor sees the same ~300 rows, which keeps
 // the README examples reproducible.
-import type { Database } from 'sql.js/dist/sql-asm.js';
+import type { Database } from '../vendor/sql-asm.js';
 import { ARTISTS, CUSTOMERS, GENRES, TRACK_WORDS_A, TRACK_WORDS_B } from '../data/sample';
 
 /** Tiny deterministic PRNG (mulberry32). */

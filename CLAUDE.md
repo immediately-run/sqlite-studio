@@ -7,10 +7,12 @@ GitHub and transpiles in the browser (no server, no build step at runtime).
 
 App-specific notes:
 
-- The SQL engine is `sql.js`, imported as the pure-JS asm build
-  (`sql.js/dist/sql-asm.js`, typed in `src/sqljs.d.ts`) and loaded lazily in
-  `src/lib/sqlite.ts`. Never switch to the `.wasm` build: the sandbox CSP blocks
-  fetching binaries.
+- The SQL engine is `sql.js`'s pure-JS asm build, **vendored** as
+  `src/vendor/sql-asm.js` (typed by the sibling `sql-asm.d.ts`; the header lists
+  the three patches) and loaded lazily in `src/lib/sqlite.ts`. Never switch to
+  the `.wasm` build (the sandbox CSP blocks fetching binaries) and never import
+  the `sql.js` npm package (its Node-only `require("node:fs")` cannot be resolved
+  by the sandbox bundler, even from files you do not import).
 - `@immediately-run/sdk/llm` is imported with a dynamic `import()` inside
   `src/components/AskPanel.tsx` only, so the app renders under plain `vite dev`.
 - Persistence is the `fs` module through `src/lib/store.ts` / `src/lib/persist.ts`
