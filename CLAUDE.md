@@ -1,9 +1,26 @@
-# Working in this repo
+# SQLite studio — working in this repo
 
-This is an **immediately.run app**: React + TypeScript that loads from GitHub and
-transpiles in the browser (no server, no build step at runtime). Keep the rules
-below or the app breaks *only* on immediately.run while still looking fine in
-local `vite dev` — the most common silent failure.
+SQLite studio is an **immediately.run app**: open a SQLite file in the browser,
+explore its tables, run SQL, chart a result, and ask questions in plain English
+through the platform's LLM connection. It is React + TypeScript that loads from
+GitHub and transpiles in the browser (no server, no build step at runtime).
+
+App-specific notes:
+
+- The SQL engine is `sql.js`, imported as the pure-JS asm build
+  (`sql.js/dist/sql-asm.js`, typed in `src/sqljs.d.ts`) and loaded lazily in
+  `src/lib/sqlite.ts`. Never switch to the `.wasm` build: the sandbox CSP blocks
+  fetching binaries.
+- `@immediately-run/sdk/llm` is imported with a dynamic `import()` inside
+  `src/components/AskPanel.tsx` only, so the app renders under plain `vite dev`.
+- Persistence is the `fs` module through `src/lib/store.ts` / `src/lib/persist.ts`
+  (private store for history, saved queries, config, saved databases; a shared
+  space is picked through the host powerbox and polled).
+- The SQL `<textarea>` is a deliberate in-app editor: the statement is transient
+  and not a file in any mount, so the platform editor cannot own it.
+
+Keep the rules below or the app breaks *only* on immediately.run while still
+looking fine in local `vite dev` — the most common silent failure.
 
 ## Hard rules (these break immediately.run if violated)
 
