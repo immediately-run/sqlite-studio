@@ -133,10 +133,6 @@ export function normaliseDbName(name: string): string {
 export async function writeDbFile(dir: string, name: string, bytes: Uint8Array): Promise<string> {
   await ensureDir(dir);
   const path = join(dir, normaliseDbName(name));
-  // A re-saved database can be smaller than the file it replaces; the host's
-  // non-truncating overwrite (see store.ts) would leave the old tail bytes on a
-  // binary file, so remove first like writeText does.
-  await removeFile(path);
   await fs.promises.writeFile(path, bytes);
   return path;
 }
