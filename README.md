@@ -49,11 +49,11 @@ binary from a CDN (Content Security Policy). The asm build is about 1.3 MB of
 JavaScript, loaded lazily the first time a database is opened, with a visible
 loading state.
 
-The build is **vendored** as `src/vendor/sql-asm.js` (with three small patches
-listed in its header) instead of being imported from the `sql.js` npm package:
-the sandbox resolves the dependencies of every file in a fetched package and has
-no shim for the `node:fs` / `node:crypto` builtins that Emscripten's Node-only
-branch requires, so the package as published cannot be bundled there.
+The build comes from the [`sql.js`](https://www.npmjs.com/package/sql.js) npm
+package (pinned at 1.14.2) rather than a vendored copy: the sandbox resolves the
+dependencies of every file in a fetched package, and it now maps the
+`node:fs` / `node:crypto` builtins that Emscripten's Node-only branch requires
+to browser shims, so the package as published bundles fine there.
 
 ## Where data is stored
 
