@@ -5,7 +5,10 @@
   "type": "module",
   "immediately.run": {
     "$schema": "https://immediately.run/immediately-run-config.schema.json",
-    "requireLatest": "optimistic"
+    "requireLatest": "optimistic",
+    "requests": {
+      "llm:chat": {}
+    }
   },
   "scripts": {
     "dev": "vite",
@@ -14,7 +17,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@immediately-run/sdk": "0.54.0",
+    "@immediately-run/sdk": "0.74.1",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "sql.js": "1.14.2"
