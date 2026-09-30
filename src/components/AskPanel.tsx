@@ -181,7 +181,12 @@ function AskPanel({ db, dbName, version, runSql, onShowInEditor }: Props) {
 
   void version; // results embedded in turns are snapshots; the editor re-runs against the live db
 
-  const ready = state.status === 'configured' && !!db;
+  // 'ungranted' is ASKABLE: this app's first call surfaces the host's llm:chat
+  // consent (the dispatcher's lazy re-gate, R3-786) — an input that only enables
+  // when the grant already exists could never earn it (the R3-820 drill's find:
+  // with no manifest declaration and no askable state, no consent could ever
+  // surface, and the panel read "add a key in settings" forever).
+  const ready = (state.status === 'configured' || state.status === 'ungranted') && !!db;
 
   return (
     <section className="ask-panel">
@@ -209,7 +214,11 @@ function AskPanel({ db, dbName, version, runSql, onShowInEditor }: Props) {
           </div>
         )}
         {state.status === 'failed' && <p className="error">Could not load the assistant: {state.message}</p>}
+        {state.status === 'ungranted' && (
+          <p className="hint">The host will ask you to allow the LLM when you ask.</p>
+        )}
         {state.status === 'configured' && !db && <p className="hint">Open a database first.</p>}
+        {state.status === 'ungranted' && !db && <p className="hint">Open a database first.</p>}
 
         {ready && turns.length === 0 && (
           <div className="ask-intro">
