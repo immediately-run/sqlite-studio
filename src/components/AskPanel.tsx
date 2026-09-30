@@ -150,7 +150,7 @@ function AskPanel({ db, dbName, version, runSql, onShowInEditor }: Props) {
           code === 'auth-required'
             ? 'No LLM key is connected yet. Add one in immediately.run settings, then ask again.'
             : code === 'forbidden'
-              ? 'This app is not allowed to use the LLM (llm:chat capability missing).'
+              ? 'The host declined the LLM request — allow the llm:chat permission when asked (the host only offers it to signed-in users).'
               : ac.signal.aborted
                 ? 'Stopped.'
                 : errorMessage(e);
@@ -215,10 +215,11 @@ function AskPanel({ db, dbName, version, runSql, onShowInEditor }: Props) {
         )}
         {state.status === 'failed' && <p className="error">Could not load the assistant: {state.message}</p>}
         {state.status === 'ungranted' && (
-          <p className="hint">The host will ask you to allow the LLM when you ask.</p>
+          <p className="hint">The host will ask you to allow the LLM when you ask — sign-in required.</p>
         )}
-        {state.status === 'configured' && !db && <p className="hint">Open a database first.</p>}
-        {state.status === 'ungranted' && !db && <p className="hint">Open a database first.</p>}
+        {(state.status === 'configured' || state.status === 'ungranted') && !db && (
+          <p className="hint">Open a database first.</p>
+        )}
 
         {ready && turns.length === 0 && (
           <div className="ask-intro">
