@@ -8,7 +8,7 @@ import {
   listSharedDbs,
   type DbFile,
 } from '../lib/persist';
-import { pollDir, type Store } from '../lib/store';
+import { watchDir, type Store } from '../lib/store';
 import { formatBytes } from '../lib/format';
 import { tableNameFromFile } from '../lib/csv';
 
@@ -66,8 +66,9 @@ function OpenDialog({
         })
         .catch(() => {});
     void load();
-    // Other members' writes only show up by polling (no remote watch events).
-    const stop = pollDir(shared.root, () => void load(), 3000);
+    // R3-901: the store root is watched recursively (the relay covers remote
+    // writes) — no 3 s poll.
+    const stop = watchDir(shared.root, () => void load());
     return () => {
       cancelled = true;
       stop();
